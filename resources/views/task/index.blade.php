@@ -2,68 +2,100 @@
 
 @section('content')
 <div class="container">
-	<div class="row justify-content-center">
-		<div class="col-md-12">
-			@if ($message = Session::get('success'))
-			<div class="alert alert-success">
-			<p>{{ $message }}</p>
-			</div>
-			@endif
-		</div>
-	</div>
-    <div class="row justify-content-center mt-5 shadow p-3 mb-5 bg-white rounded">
-			<div class="row">
-				<div class="col-md-12 bg-white p-5">
-					<div class="table-wrap">
-						<h2>Task Management</h2>
-						<th><a href="{{ route('tasks.create') }}" class="btn btn-success"><i class="bi bi-plus-lg"></i> Add Task</a></th>
-							<table class="table table-bordered mt-3">
-                <thead>
-									<tr>
-										<th>#</th>
-										<th>Name</th>
-										<th>In Project</th>
-										<th>Assign To</th>
-										<th>start date</th>
-										<th>End date</th>
-										<th>Status</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach ($tasks as $task)		
-									<tr>
-										<th scope="row">{{ $loop->iteration }}</th>
-										<td>{{ $task->name }}</td>
-										<td>{{ $task->project->name }}</td>
-										<td>{{ $task->user->name }}</td>
-										<td>{{ $task->start_date }}</td>
-										<td>{{ $task->end_date }}</td>
-										<td>
-											@if ($task->status == "up coming")
-											<a href="#" class="btn btn-primary">Up Coming</a>
-											@elseif($task->status == "in progres")
-											<a href="#" class="btn btn-warning">In Progres</a>
-											@else
-											<a href="#" class="btn btn-success">Complete</a>
-											@endif
-										<td>
-											<a class="btn btn-info" href="{{ route('tasks.show', $task->id) }}">Show</a>
-											<a class="btn btn-primary" href="{{ route('tasks.edit', $task->id) }}">Edit</a>
-											<form action="{{ route('tasks.destroy', $task->id) }}" class="d-inline" method="POST">
-												@csrf
-												@method('delete')
-												<button type="submit" class="btn btn-danger border-0" onclick="return confirm('Are you sure to delete this user?')">Delete</button>
-											</form>
-										</td>
-									</tr>
-									@endforeach
-								</tbody>
-							</table>
+	<h2 class="fw-bolder">Task Management</h2>
+	<a href="{{ route('projects.index') }}" class="btn btn-warning"><i class="bi bi-arrow-left-square"></i> Back</a>
+	<a href="{{ route('tasks.create') }}" class="btn btn-success"><i class="bi bi-plus-lg"></i> Create Task</a>
+	<div class="row mb-3 mt-3">
+			<div class="col-3 col-md-6 col-lg-4 mb-3">
+				<div class="card border-0 p-3">
+					<div class="card-title">
+						<h4 class="fw-semibold text-primary">Up coming</h4>
 					</div>
+					@foreach ($task as $item)
+					@if($item->status == "up coming")
+					<div class="row p-2">
+						<div class="col-12 p-3 border">
+							<div class="card-title">
+								<h5><b>{{ $item->name }}</b></h5>
+							</div>
+							<div class="card-body">
+								<p class="fw-semibold">Assign To : <button href="" class="badge badge-success border-0">{{ $item->user->name }}</button></p>
+								<p class="fw-semibold mb-5">End Date : <button href="" class="badge badge-warning border-0">{{ $item->end_date }}</button></p>
+
+								<a class="btn btn-primary border-0" href="{{ route('tasks.edit', $item->id) }}"><i class="bi bi-pencil-square"></i></a>
+								<form action="" class="d-inline" method="POST">
+									@csrf
+									@method('delete')
+									<button type="submit" class="btn btn-danger border-0" onclick="return confirm('Are you sure to delete this project?')"><i class="bi bi-trash"></i></button>
+								</form>
+							</div>
+						</div>
+					</div>
+					@endif
+					@endforeach
 				</div>
-			</div> 
-    </div>
-  </div>
+			</div>
+			<div class="col-3 col-md-6 col-lg-4 mb-3">
+				<div class="card p-3 border-0 border-box">
+					<div class="card-title">
+						<h4 class="fw-semibold text-warning">In Progres</h4>
+					</div>
+					@foreach ($task as $item)
+					@if($item->status == "in progres")
+					<div class="row p-2">
+						<div class="col-12 p-3 border">
+							<div class="card-title">
+								<h5><b>{{ $item->name }}</b></h5>
+							</div>
+							<div class="card-body">
+								<p class="fw-semibold">Assign To : <button href="" class="badge badge-success border-0">{{ $item->user->name }}</button></p>
+								<p class="fw-semibold mb-5">End Date : <button href="" class="badge badge-warning border-0">{{ $item->end_date }}</button></p>
+
+								<a class="btn btn-primary" href="{{ route('tasks.edit', $item->id) }}"><i class="bi bi-pencil-square"></i></a>
+								<form action="" class="d-inline" method="POST">
+									@csrf
+									@method('delete')
+									<button type="submit" class="btn btn-danger border-0" onclick="return confirm('Are you sure to delete this project?')"><i class="bi bi-trash"></i></button>
+								</form>
+							</div>
+						</div>
+					</div>
+					@endif
+					@endforeach
+				</div>
+			</div>
+		
+			<div class="col-3 col-md-6 col-lg-4 mb-3">
+				<div class="card p-3 border-0">
+					<div class="card-title">
+						<h4 class="fw-semibold text-success">Complete</h4>
+					</div>
+					@foreach ($task as $item)
+					@if($item->status == "complete")
+					<div class="row p-2">
+						<div class="col-12 p-3 border">
+							<div class="card-title">
+								<h5><b>{{ $item->name }}</b></h5>
+							</div>
+							<div class="card-body">
+								<p class="fw-semibold">Assign To : <button href="" class="badge badge-success border-0">{{ $item->user->name }}</button></p>
+								<p class="fw-semibold mb-5">End Date : <button href="" class="badge badge-warning border-0">{{ $item->end_date }}</button></p>
+
+								{{-- <a class="btn btn-primary border-0" href="{{ route('tasks.edit', $item->id) }}"><i class="bi bi-pencil-square"></i></a> --}}
+								<a class="btn btn-primary" href="{{ route('tasks.edit', $item->id) }}"><i class="bi bi-pencil-square"></i></a>
+								<form action="" class="d-inline" method="POST">
+									@csrf
+									@method('delete')
+									<button type="submit" class="btn btn-danger border-0" onclick="return confirm('Are you sure to delete this project?')"><i class="bi bi-trash"></i></button>
+								</form>
+							</div>
+						</div>
+					</div>
+					@endif
+					@endforeach
+				</div>
+			</div>
+		
+	</div>
 </div>
 @endsection

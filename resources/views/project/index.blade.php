@@ -10,47 +10,43 @@
     @endif
   </div>
 </div>
-
-<div class="row justify-content-center">
-  <div class="col-md-8 bg-white p-5 shadow p-3 mb-5 bg-white rounded">
-
-    <h2>Project Management</h2>
-    <a class="btn btn-success mb-3" href="{{ route('projects.create') }}"><i class="bi bi-plus-lg"></i> Create New Project</a>
-
-    <table class="table table-bordered" >
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Project Manager</th>
-        <th>Status</th>
-        <th width="280px">Action</th>
-      </tr>
-      @foreach ($projects as $data)
-       <tr>
-        <td>{{ $loop->iteration }}</td>
-        <td>{{ $data->name }}</td>
-        <td>{{ $data->manager->name }}</td>
-        <td>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12 bg-body mb-5">
+      <a href="{{ route('projects.create') }}" class="btn btn-success"><i class="bi bi-plus-lg"></i> Create Project</a>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    @foreach ($projects as $data)     
+    <div class="col-12 col-md-6 col-lg-4 mb-5">
+      <div class="card border-0">
+        <div class="card-body">
+          <h4 class="card-title"><b>{{ $data->name }}</b></h4>
           @if ($data->status == "up coming")
-          <a href="#" class="btn btn-primary">Up Coming</a>
+          <button href="#" class="badge badge-primary border-0 mb-3">Up Coming</button>
           @elseif($data->status == "in progres")
-          <a href="#" class="btn btn-warning">In Progres</a>
+          <button href="#" class="badge badge-warning border-0 mb-3">In Progres</button>
           @else
-          <a href="#" class="btn btn-success">Complete</a>
+          <button href="#" class="badge badge-success border-0 mb-3">Complete</button>
           @endif
-        </td>
-        <td>
-          <a class="btn btn-info" href="{{ route('projects.show', $data->id) }}">Show</a>
-          <a class="btn btn-primary" href="{{ route('projects.edit', $data->id) }}">Edit</a>
-          <form action="{{ route('projects.destroy', $data->id) }}" class="d-inline" method="POST">
-            @csrf
-            @method('delete')
-            <button type="submit" class="btn btn-danger border-0" onclick="return confirm('Are you sure to delete this project?')">Delete</button>
-          </form>
-        </td>
-      </tr>
-      @endforeach
-     </table>
+          <p class="card-text">{{ $data->excerpt }}</p>
+          <p class="fw-bold fs-5">Manager : {{ $data->manager->name }}</p>
+          <a href="{{ route('projects.show', $data->id) }}" class="card-link">Details......</a>
+        </div>
+        <div class="col-4 col-md-6 col-lg-4 d-inline mb-3">
+        <a class="btn btn-primary" href="{{ route('projects.edit', $data->id) }}"><i class="bi bi-pencil-square"></i></a>
+        <form action="{{ route('projects.destroy', $data->id) }}" class="d-inline" method="POST">
+          @csrf
+          @method('delete')
+          <button type="submit" class="btn btn-danger border-0" onclick="return confirm('Are you sure to delete this project?')"><i class="bi bi-trash"></i></button>
+        </form>
+        <a class="btn btn-info mt-1" href="{{ route('projects.show', $data->id) }}"><i class="bi bi-eye"></i> Task</a>        
+        </div>
+      </div>
+    </div>
+    @endforeach
   </div>
 </div>
 @endsection

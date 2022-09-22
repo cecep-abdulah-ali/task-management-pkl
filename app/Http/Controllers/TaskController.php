@@ -18,6 +18,10 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::with('user')->get();
+        // // $task = Task::where('project_id', $id)->get();
+        // $uniqid = session('projects');
+        // $project = Task::whereIn('project_id', $uniqid)->get();
+
         return view('task.index', compact('tasks'));
     }
 
@@ -26,13 +30,11 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $project = Project::get();
-
         $task_members = User::role('staff')->get();
 
-        return view('task.create', compact('project', 'task_members'));
+        return view('task.create', compact('task_members'));
     }
 
     /**
@@ -43,21 +45,37 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
+        // $this->validate($request, [
+        //     'name' => 'required',
+        //     'project_id' => 'required',
+        //     'user_id' => 'required',
+        //     'start_date' => 'required',
+        //     'end_date' => 'required',
+        //     'status' => 'required',
+        //     'comment' => 'required',
+        // ]);
+
+
+        // $data = $request->all();
+        // $task = Task::create($data);
+        $validatedData = $request->validate([
+            // 'project_id' => 'required',
+            'name' => 'required|max:255',
             'project_id' => 'required',
             'user_id' => 'required',
+            'status' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
-            'status' => 'required',
             'comment' => 'required',
         ]);
 
+        // $validatedData['project_id'] = $project;
 
-        $data = $request->all();
-        $task = Task::create($data);
 
-        return redirect()->route('tasks.index')
+        $data = Task::create($validatedData);
+        dd($data);
+
+        return redirect()->route('projects.index')
                             ->with('success','Task created successfully');
     }
 
@@ -69,7 +87,8 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = Task::find($id);
+         $task = Task::where('project_id', $id)->get();
+
 
         return view('task.show', compact('task'));
     }
@@ -103,7 +122,7 @@ class TaskController extends Controller
  
         $task->update($input);
 
-        return redirect()->route('tasks.index')
+        return redirect()->route('projects.index')
                         ->with('success','Task update successfully');
     }
 

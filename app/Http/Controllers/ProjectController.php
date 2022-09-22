@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -15,7 +17,11 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::with('manager')->orderBy('id', 'desc')->get();
+        $projects = Project::with('manager', 'members')->orderBy('id', 'desc')->get();
+        // foreach($projects as $data) {
+        //     // $task = Task::where('project_id', $data->id)->get();
+        //     $excerpt = Str::words($data->description, 10);
+        // }
         return view('project.index', compact('projects'));
     }
 
@@ -41,18 +47,33 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $data = Project::create([
-            'manager_id' => $request->manager_id,
-            'name' => $request->name,
-            'members_id' => $request->members_id,
-            'status' => $request->status,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'description' => $request->description,
+        // $data = Project::create([
+        //     'manager_id' => $request->manager_id,
+        //     'name' => $request->name,
+        //     'members_id' => $request->members_id,
+        //     'status' => $request->status,
+        //     'start_date' => $request->start_date,
+        //     'end_date' => $request->end_date,
+        //     'description' => $request->description,
 
-        ]);
+        // ]);
 
         // $data = $request->all();
+        $validatedData = $request->validate([
+            'manager_id' => 'required',
+            'name' => 'required|max:255',
+            'members_id' => 'required',
+            'status' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'description' => 'required',
+        ]);
+
+        $validatedData['description'] = strip_tags($request->description);
+
+        $validatedData['excerpt'] = Str::limit(strip_tags($request->description), 50);
+
+        $data = Project::create($validatedData);
 
         $data->members()->attach($request->input('members_id'));
 
@@ -68,11 +89,12 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = Project::find($id);
+        $task = Task::where('project_id', $id)->get();
 
-        $projects = $project->load('manager');
+        $project_id = $id;
 
-        return view('project.show', compact('project', 'projects'));
+
+        return view('task.index', compact('task', 'project_id'));
     }
 
     /**
