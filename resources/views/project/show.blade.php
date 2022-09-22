@@ -5,9 +5,11 @@
 @section('content')
 
 <div class="row justify-content-center">
+  <div class="col-md-8 shadow p-3 mb-1 bg-white rounded">
+    <h2>Project Detail</h2>
+  </div>
     <div class="col-md-8 shadow p-3 mb-5 bg-white rounded">
-        <h2>Project Detail</h2>
-        <div class="card">
+        <div class="card border-0">
           <div class="card-body">
             <h5 class="card-text fn-md">Project Name : <b>{{ $project->name }}</b></h5>
             <br>

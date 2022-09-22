@@ -22,7 +22,7 @@
     <div class="col-md-8 bg-white p-5">
 
         <h2>Create New Task</h2>
-        <a class="btn btn-warning mt-3" href="{{ route('tasks.index') }}"> Back</a>
+        <a class="btn btn-warning mt-3" href="{{ route('projects.index') }}"> Back</a>
 
         <form action="{{ route('tasks.store') }}" method="POST" class="mt-5">
             @csrf
@@ -31,13 +31,7 @@
                 <input name="name" type="text" class="form-control" id="name" required autofocus>
             </div>
             <div class="mb-3">
-              <label for="project_id">In Project : </label>
-                  <select name="project_id" class="form-select" id="project_id" aria-label="Default select example" required>
-                      <option />
-                      @foreach ($project as $data)
-                      <option value="{{ $data->id }}">{{ $data->name }}</option>
-                      @endforeach
-                  </select>
+              <input name="project_id" type="hidden" class="form-control" id="project_id" value="" disabled>  
             </div>
             <div class="mb-3">
               <label for="user_id">Assign To : </label>

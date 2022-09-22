@@ -75,8 +75,8 @@
             </div>
             <div class="mb-3">
               <div class="form-floating">
-                <textarea name="description" class="form-control" placeholder="Leave a description here" id="description" style="height: 200px"></textarea>
-                <label for="description">Description</label>
+                <input id="description" type="hidden" name="description" required>
+                <trix-editor input="description"></trix-editor>
               </div>
             </div>
             <button type="submit" class="btn btn-primary mt-3">Submit</button>

@@ -64,7 +64,7 @@
                 @endif
                 @endguest
                 <li class="nav-item">
-                  <a class="nav-link" href="">Dashboard</a>
+                  <a class="nav-link" href="{{ url('/home') }}">Dashboard</a>
                 </li>
   
                 <li class="nav-item">
@@ -75,14 +75,14 @@
                   <a class="nav-link" href="{{ route('roles.index') }}">Role</a>
                 </li>
   
-                <li class="nav-item dropdown">
+                {{-- <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">Task</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown03">
                     <li><a class="dropdown-item" href="#">My Task</a></li>
                     <li><a class="dropdown-item" href="{{ route('tasks.index') }}">Task list</a></li>
                   </ul>
                 </li>
-  
+   --}}
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">Project</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdown03">
@@ -92,9 +92,6 @@
                 </li>
               </ul>
               <ul class="navbar-nav ml-auto mb-2 mb-sm-0">
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url('/home') }}">Home</a>
-                </li>
   
                 <li class="nav-item dropdown ml-auto">
                   <a id="navbarDropdown" class="nav-link dropdown-toggle ml-auto" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
