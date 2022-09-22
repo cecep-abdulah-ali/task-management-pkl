@@ -22,16 +22,14 @@
     <div class="col-md-8 bg-white p-5">
 
         <h2>Create New Task</h2>
-        <a class="btn btn-warning mt-3" href="{{ route('projects.index') }}"> Back</a>
+        <a class="btn btn-warning mt-3" href="{{ route('projects.show', ['project' => $project_id]) }}"> Back</a>
 
         <form action="{{ route('tasks.store') }}" method="POST" class="mt-5">
             @csrf
+            <input name="project_id" type="hidden" class="form-control" id="project_id" value="{{$project_id}}">
             <div class="mb-3">
                 <label for="name" class="form-label">Task Name : </label>
                 <input name="name" type="text" class="form-control" id="name" required autofocus>
-            </div>
-            <div class="mb-3">
-              <input name="project_id" type="hidden" class="form-control" id="project_id" value="" disabled>  
             </div>
             <div class="mb-3">
               <label for="user_id">Assign To : </label>

@@ -87,14 +87,11 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Project $project)
     {
-        $task = Task::where('project_id', $id)->get();
+        $tasks = Task::where('project_id', $project->id)->get();
 
-        $project_id = $id;
-
-
-        return view('task.index', compact('task', 'project_id'));
+        return view('task.index', compact('tasks', 'project'));
     }
 
     /**

@@ -30,11 +30,13 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(Request $request, $project_id)
     {
-        $task_members = User::role('staff')->get();
+        $task_members = User::role('staff')->whereHas('project_staff', function($query) use($project_id){
+            $query->where('project_id', $project_id);
+        })->get();
 
-        return view('task.create', compact('task_members'));
+        return view('task.create', compact('task_members','project_id'));
     }
 
     /**
@@ -73,9 +75,8 @@ class TaskController extends Controller
 
 
         $data = Task::create($validatedData);
-        dd($data);
 
-        return redirect()->route('projects.index')
+        return redirect()->route('projects.show', ['project' => $request->project_id])
                             ->with('success','Task created successfully');
     }
 
@@ -99,12 +100,12 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Task $task)
     {
-        $task = Task::find($id);
-        $task_project = Project::get();
-        $task_user = User::role('staff')->get();
-        return view('task.edit', compact('task', 'task_project', 'task_user'));
+        $task_members = User::role('staff')->whereHas('project_staff', function($query) use($task){
+            $query->where('project_id', $task->project->id);
+        })->get();
+        return view('task.edit', compact('task', 'task_members'));
     }
 
     /**
@@ -114,15 +115,12 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Task $task)
     {
         $input = $request->all();
-
-        $task = Task::find($id);
- 
         $task->update($input);
 
-        return redirect()->route('projects.index')
+        return redirect()->route('projects.show', ['project' => $task->project_id])
                         ->with('success','Task update successfully');
     }
 
@@ -132,10 +130,11 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        Task::find($id)->delete();
-        return redirect()->route('tasks.index')
+        $project_id = $task->project_id;
+        $task->delete();
+        return redirect()->route('projects.show', ['project' => $project_id])
                         ->with('success','Task deleted successfully');
     }
 }
