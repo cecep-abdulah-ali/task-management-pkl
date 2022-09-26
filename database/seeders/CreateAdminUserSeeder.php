@@ -25,9 +25,7 @@ class CreateAdminUserSeeder extends Seeder
     
         $role = Role::create(['name' => 'Admin']);
      
-        $permissions = Permission::pluck('id','id')->all();
-   
-        $role->syncPermissions($permissions);
+        $role->syncPermissions(['home-admin', 'user-management', 'role-management', 'project-list', 'project-admin', 'task-admin', 'project-create', 'project-edit', 'project-delete', 'task-create', 'task-edit', 'task-delete']);
      
         $user->assignRole([$role->id]);
 
@@ -39,8 +37,22 @@ class CreateAdminUserSeeder extends Seeder
     
         $role = Role::create(['name' => 'Project Manager']);
    
-        $role->syncPermissions(['home', 'my-project', 'my-task', 'project-list', 'task-list']);
+        $role->syncPermissions(['home-manager', 'project-list', 'project-manager', 'project-edit', 'project-delete', 'task-manager', 'task-create', 'task-edit', 'task-delete']);
      
+        $user->assignRole([$role->id]);
+
+        $user = User::create([
+            'name' => 'limbad', 
+            'email' => 'limbad@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
+        $user->assignRole([$role->id]);
+
+        $user = User::create([
+            'name' => 'merah', 
+            'email' => 'merah@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
         $user->assignRole([$role->id]);
 
         $user = User::create([
@@ -51,8 +63,22 @@ class CreateAdminUserSeeder extends Seeder
     
         $role = Role::create(['name' => 'Staff']);
    
-        $role->syncPermissions(['home', 'my-project', 'my-task']);
+        $role->syncPermissions(['home-staff', 'project-list', 'project-staff', 'task-staff', 'task-edit']);
      
+        $user->assignRole([$role->id]);
+
+        $user = User::create([
+            'name' => 'ragil', 
+            'email' => 'ragil@gmail.com',
+            'password' => bcrypt('123456')
+        ]);
+        $user->assignRole([$role->id]);
+
+        $user = User::create([
+            'name' => 'ghesa', 
+            'email' => 'ghesa@gmail.com',
+            'password' => bcrypt('123456')
+        ]);  
         $user->assignRole([$role->id]);
 
         $user = User::create([
@@ -63,7 +89,7 @@ class CreateAdminUserSeeder extends Seeder
     
         $role = Role::create(['name' => 'User']);
    
-        $role->syncPermissions(['home']);
+        $role->syncPermissions(['home-user']);
      
         $user->assignRole([$role->id]);
     }

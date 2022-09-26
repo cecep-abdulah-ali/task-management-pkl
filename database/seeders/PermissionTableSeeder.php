@@ -16,26 +16,25 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'role-list',
-            'role-create',
-            'role-edit',
-            'role-delete',
-            'user-list',
-            'user-create',
-            'user-edit',
-            'user-delete',
-            'my-project',
+            'role-management',
+            'user-management',
             'project-list',
+            'project-admin',
+            'project-manager',
+            'project-staff',
             'project-create',
             'project-edit',
             'project-delete',
-            'my-task',
-            'task-list',
+            'task-admin',
+            'task-manager',
+            'task-staff',
             'task-create',
             'task-edit',
             'task-delete',
-            'home',
-            'dashboard'
+            'home-staff',
+            'home-manager',
+            'home-admin',
+            'home-user'
 
          ];
       

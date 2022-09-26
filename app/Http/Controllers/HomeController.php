@@ -40,8 +40,19 @@ class HomeController extends Controller
 
         // $permission = Auth::user()->getPermissionNames();
         // $roles = Auth::user()->getRoleNames();
+        $user_id = Auth::user()->id;
+
+        $tasks = Task::where('user_id', $user_id)->get();
+
+        $projects = Project::where('manager_id', $user_id)->get();
+
+        $user_total = User::all()->count();
+
+        $role_total = Role::all()->count();
+
+        $project_total = Project::all()->count();
 
 
-        return view('home');
+        return view('home', compact('tasks', 'projects', 'user_total', 'role_total', 'project_total'));
     }
 }

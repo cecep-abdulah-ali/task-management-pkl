@@ -47,21 +47,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->validate($request, [
-        //     'name' => 'required',
-        //     'project_id' => 'required',
-        //     'user_id' => 'required',
-        //     'start_date' => 'required',
-        //     'end_date' => 'required',
-        //     'status' => 'required',
-        //     'comment' => 'required',
-        // ]);
-
-
-        // $data = $request->all();
-        // $task = Task::create($data);
         $validatedData = $request->validate([
-            // 'project_id' => 'required',
             'name' => 'required|max:255',
             'project_id' => 'required',
             'user_id' => 'required',
@@ -70,8 +56,6 @@ class TaskController extends Controller
             'end_date' => 'required',
             'comment' => 'required',
         ]);
-
-        // $validatedData['project_id'] = $project;
 
 
         $data = Task::create($validatedData);

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class TaskMember extends Model
 {
     use HasFactory;
+
+    protected $table = 'task-members';
 }

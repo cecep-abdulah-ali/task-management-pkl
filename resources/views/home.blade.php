@@ -3,51 +3,137 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    Welcome {{ Auth::user()->name }} !!
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8 my-3 p-3 bg-body shadow p-3 mb-5 bg-body rounded">
-            <h6 class="border-bottom pb-2 mb-0">Your Tasks</h6>
-            <div class="d-flex text-muted pt-3">
-              <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"/><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
-        
-              <p class="pb-3 mb-0 small lh-sm border-bottom">
-                <strong class="d-block text-gray-dark">@username</strong>
-                Some representative placeholder content, with some information about this user. Imagine this being some sort of status update, perhaps?
-              </p>
-            </div>
-            <div class="d-flex text-muted pt-3">
-              <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#e83e8c"/><text x="50%" y="50%" fill="#e83e8c" dy=".3em">32x32</text></svg>
-        
-              <p class="pb-3 mb-0 small lh-sm border-bottom">
-                <strong class="d-block text-gray-dark">@username</strong>
-                Some more representative placeholder content, related to this other user. Another status update, perhaps.
-              </p>
-            </div>
-            <div class="d-flex text-muted pt-3">
-              <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#6f42c1"/><text x="50%" y="50%" fill="#6f42c1" dy=".3em">32x32</text></svg>
-        
-              <p class="pb-3 mb-0 small lh-sm border-bottom">
-                <strong class="d-block text-gray-dark">@username</strong>
-                This user also gets some representative placeholder content. Maybe they did something interesting, and you really want to highlight this in the recent updates.
-              </p>
-            </div>
-            <small class="d-block text-end mt-3">
-              <a href="#">All updates</a>
-            </small>
+      @can('home-user')
+      <div class="col-md-12 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="">Welcome {{ Auth::user()->name }} !! <p class="fst-italic text-danger">Ask admin to change your role!!</p></h4>
           </div>
+        </div>
+      </div>
+      @endcan
+
+      {{-- for staff --}}
+      @can('home-staff')
+      <div class="col-md-12 mb-3">
+        <h4 class="fw-bold">Welcome Back {{ Auth::user()->name }} !!</h4>
+      </div>
+      <h4>Your Tasks : </h4>
+        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+          @foreach ($tasks as $task)
+          <div class="col-md-3">
+            <div class="card mb-4 rounded-3 shadow-sm">
+              <div class="card-header py-3">
+                @if($task->status == "up coming")
+                <button class="badge bg-primary my-0 fw-normal border-0">Up coming</button>
+                @elseif($task->status == "in progres")
+                <button class="badge bg-warning my-0 fw-normal border-0">In progres</button>
+                @else
+                <button class="badge bg-success my-0 fw-normal border-0">Complete</button>
+                @endif
+              </div>
+              <div class="card-body">
+                <h5 class="card-title pricing-card-title">{{ $task->name }}</h5>
+                <p>In Project : <strong>{{ $task->project->name }}</strong></p>
+                <p>Start Date : <strong>{{ $task->start_date }}</strong></p>
+                <p>End Date : <strong>{{ $task->end_date }}</strong> </p>
+                <a href="{{ route('projects.show', $task->project->id) }}" class="btn btn-sm btn-outline-primary">Go To Task List</a>
+              </div>
+            </div>
+          </div>
+        @endforeach
+        </div>
+      @endcan
+      {{-- end for staff --}}
+
+      {{-- for manager --}}
+      @can('home-manager')
+      <div class="col-md-12 mb-3">
+        <h4 class="fw-bold">Welcome Back {{ Auth::user()->name }} !!</h4>
+      </div>
+      <h4>Your Project : </h4>
+        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+          @foreach ($projects as $project)
+          <div class="col-md-3">
+            <div class="card mb-4 rounded-3 shadow-sm">
+              <div class="card-header py-3">
+                @if($project->status == "up coming")
+                <button class="badge bg-primary my-0 fw-normal border-0">Up coming</button>
+                @elseif($project->status == "in progres")
+                <button class="badge bg-warning my-0 fw-normal border-0">In progres</button>
+                @else
+                <button class="badge bg-success my-0 fw-normal border-0">Complete</button>
+                @endif
+              </div>
+              <div class="card-body">
+                <h5 class="card-title pricing-card-title">{{ $project->name }}</h5>
+                <p>Start Date : <strong>{{ $project->start_date }}</strong></p>
+                <p>End Date : <strong>{{ $project->end_date }}</strong> </p>
+                <a href="{{ route('projects.index') }}" class="btn btn-sm btn-outline-primary">Go To Project List</a>
+              </div>
+            </div>
+          </div>
+        @endforeach
+        </div>
+      @endcan
+      {{-- end for manager --}}
+
+      {{-- for admin --}}
+      @can('home-admin')
+      <div class="col-md-12 mb-3">
+        <h4 class="fw-bold">Welcome Back {{ Auth::user()->name }} !!</h4>
+      </div>
+      <h4>Dashboard</h4>
+        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+          {{-- user --}}
+          <div class="col-md-4">
+            <div class="card mb-4 rounded-3 shadow-sm">
+              <div class="card-header py-3">
+                <button class="btn bg-primary my-0 fw-normal border-0 text-light">User</button>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title pricing-card-title"></h5>
+                <h1><i class="bi bi-people-fill"></i></h1>
+                <h2 class="mb-3"><strong>{{ $user_total }}</strong></h2>
+                <a href="{{ route('users.index') }}" class="btn btn-sm btn-outline-primary">Go To User List</a>
+              </div>
+            </div>
+          </div>
+          {{-- end user --}}
+          {{-- Role --}}
+          <div class="col-md-4">
+            <div class="card mb-4 rounded-3 shadow-sm">
+              <div class="card-header py-3">
+                <button class="btn bg-primary my-0 fw-normal border-0 text-light">Role</button>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title pricing-card-title"></h5>
+                <h1><i class="bi bi-diagram-3-fill"></i></h1>
+                <h2 class="mb-3"><strong>{{ $role_total }}</strong></h2>
+                <a href="{{ route('roles.index') }}" class="btn btn-sm btn-outline-primary">Go To Role List</a>
+              </div>
+            </div>
+          </div>
+          {{-- end Role --}}
+          {{-- Project --}}
+          <div class="col-md-4">
+            <div class="card mb-4 rounded-3 shadow-sm">
+              <div class="card-header py-3">
+                <button class="btn bg-primary my-0 fw-normal border-0 text-light">Project</button>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title pricing-card-title"></h5>
+                <h1><i class="bi bi-list-task"></i></h1>
+                <h2 class="mb-3"><strong>{{ $project_total }}</strong></h2>
+                <a href="{{ route('projects.index') }}" class="btn btn-sm btn-outline-primary">Go To Project List</a>
+              </div>
+            </div>
+          </div>
+          {{-- end Project --}}
+        </div>
+        
+      @endcan
+      {{-- end for admin --}}
     </div>
-</div>
+
 @endsection

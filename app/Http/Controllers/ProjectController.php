@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ProjectController extends Controller
@@ -17,12 +18,17 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        $user = Auth::user()->id;
+
         $projects = Project::with('manager', 'members')->orderBy('id', 'desc')->get();
-        // foreach($projects as $data) {
-        //     // $task = Task::where('project_id', $data->id)->get();
-        //     $excerpt = Str::words($data->description, 10);
-        // }
-        return view('project.index', compact('projects'));
+
+        $for_manager = Project::where('manager_id', $user)->get();
+
+        $for_staff = Project::wherehas('members', function($query) use($user){
+            $query->where('user_id', $user);
+        })->get();
+
+        return view('project.index', compact('projects', 'for_manager', 'for_staff'));
     }
 
     /**
@@ -47,18 +53,6 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        // $data = Project::create([
-        //     'manager_id' => $request->manager_id,
-        //     'name' => $request->name,
-        //     'members_id' => $request->members_id,
-        //     'status' => $request->status,
-        //     'start_date' => $request->start_date,
-        //     'end_date' => $request->end_date,
-        //     'description' => $request->description,
-
-        // ]);
-
-        // $data = $request->all();
         $validatedData = $request->validate([
             'manager_id' => 'required',
             'name' => 'required|max:255',
@@ -89,9 +83,12 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        $user = Auth::user()->id;
         $tasks = Task::where('project_id', $project->id)->get();
+        $for_staff = Task::where('project_id', $project->id)->where('user_id', $user)->get();
 
-        return view('task.index', compact('tasks', 'project'));
+
+        return view('task.index', compact('tasks', 'project', 'for_staff'));
     }
 
     /**

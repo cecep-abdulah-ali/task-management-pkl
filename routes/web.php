@@ -26,13 +26,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['middleware' => ['permission:home-user|home-staff|home-manager|home-admin']], function() {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => ['auth']], function() {
+});
+
+Route::group(['middleware' => ['permission:user-management|role-management|project-list|project-admin|project-manager|project-staff|project-edit|project-create|project-delete']], function() {
     Route::resource('users', UsersController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('projects', ProjectController::class);
-    // Route::resource('tasks', TaskController::class);
+});
+
+Route::group(['middleware' => ['permission:task-admin|task-manager|task-staff|task-create|task-edit|task-delete']], function() {
     Route::get('/task', [TaskController::class, 'index']);
     Route::get('/task/create/{project_id}', [TaskController::class, 'create'])->name('tasks.create');
     Route::get('/task/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');

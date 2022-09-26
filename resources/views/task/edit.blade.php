@@ -36,6 +36,7 @@
                   <select name="user_id" class="form-select" id="user_id" aria-label="Default select example" required>
                       <option />
                       @if(old('user_id', $task->user->name) == $task->user->name)
+                      <option value="{{ $task->user->id }}" selected>{{ $task->user->name }}</option>
                         @foreach ($task_members as $data)
                           <option value="{{ $data->id }}">{{ $data->name }}</option>
                         @endforeach

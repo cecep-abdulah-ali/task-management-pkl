@@ -31,17 +31,13 @@
           <td>
             <a href="{{ route('roles.show',$role->id) }}" class="btn btn-info">Show</a>
 
-            @can('role-edit')
             <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
-            @endcan
 
-            @can('role-delete')
             <form action="{{ route('roles.destroy', $role->id) }}" class="d-inline" method="POST">
               @csrf
               @method('delete')
               <button type="submit" class="btn btn-danger border-0" onclick="return confirm('Are you sure to delete this role?')">Delete</button>
             </form>
-            @endcan
           </td>
         </tr>
       </tr>

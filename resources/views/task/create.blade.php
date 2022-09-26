@@ -19,7 +19,7 @@
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-8 bg-white p-5">
+    <div class="col-md-8 bg-white p-5 shadow p-3 mb-5 bg-body rounded">
 
         <h2>Create New Task</h2>
         <a class="btn btn-warning mt-3" href="{{ route('projects.show', ['project' => $project_id]) }}"> Back</a>
@@ -40,6 +40,15 @@
                       @endforeach
                   </select>
             </div>
+            {{-- <div class="mb-3">
+              <label for="user_id">Select Members : </label>
+              <select name="user_id[]" multiple="" class="label ui selection fluid dropdown" placeholder="Select Members">
+                  <option />
+                  @foreach ($task_members as $data)
+                  <option value="{{ $data->id }}">{{ $data->name }}</option>
+                  @endforeach
+              </select>
+          </div> --}}
             <div class="mb-3">
             <div class="row g-2">
                 <div class="col-md">

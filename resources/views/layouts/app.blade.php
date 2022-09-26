@@ -49,7 +49,7 @@
       
             <div class="collapse navbar-collapse" id="navbarsExample03">
               <ul class="navbar-nav me-auto mb-2 mb-sm-0">
-                @Auth
+                
                 @guest
                 @if (Route::has('login'))
                 <li class="nav-item">
@@ -63,33 +63,29 @@
                     </li>
                 @endif
                 @endguest
+                @Auth
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url('/home') }}">Dashboard</a>
                 </li>
-  
+
+                @can('user-management')   
                 <li class="nav-item">
                   <a class="nav-link" href="{{ route('users.index') }}">User</a>
                 </li>
-  
+                @endcan
+                
+                @can('role-management')   
                 <li class="nav-item">
                   <a class="nav-link" href="{{ route('roles.index') }}">Role</a>
                 </li>
-  
-                {{-- <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">Task</a>
-                  <ul class="dropdown-menu" aria-labelledby="dropdown03">
-                    <li><a class="dropdown-item" href="#">My Task</a></li>
-                    <li><a class="dropdown-item" href="{{ route('tasks.index') }}">Task list</a></li>
-                  </ul>
+                @endcan
+
+                @can('project-list')      
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ route('projects.index') }}">Project</a>
                 </li>
-   --}}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">Project</a>
-                  <ul class="dropdown-menu" aria-labelledby="dropdown03">
-                    <li><a class="dropdown-item" href="#">My Project</a></li>
-                    <li><a class="dropdown-item" href="{{ route('projects.index') }}">Project List</a></li>
-                  </ul>
-                </li>
+                @endcan
+                
               </ul>
               <ul class="navbar-nav ml-auto mb-2 mb-sm-0">
   

@@ -19,7 +19,7 @@
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-8 bg-white p-5">
+    <div class="col-md-8 bg-white p-5 shadow p-3 mb-5 bg-body rounded">
 
         <h2>Create New Project</h2>
         <a class="btn btn-warning mt-3" href="{{ route('projects.index') }}"> Back</a>
@@ -42,7 +42,6 @@
             <div class="mb-3">
               <label for="members">Select Members : </label>
               <select name="members_id[]" multiple="" class="label ui selection fluid dropdown" placeholder="Select Members">
-                  <option />
                   @foreach ($project_member as $data)
                   <option value="{{ $data->id }}">{{ $data->name }}</option>
                   @endforeach
